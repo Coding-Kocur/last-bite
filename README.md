@@ -10,7 +10,7 @@ Website prototype for Last Bite: stores in Nicosia post the food they have left 
 
 ## Running it
 
-Open `index.html` in a browser. There is no build step and no server.
+Open `index.html` in a browser. There is no build step and no server. Bootstrap 5.3 and the fonts load from a CDN, so the page needs a connection the first time.
 
 Offers posted on the store page and reservations are kept in the browser's local storage, so they stay on the device where they were made. Nothing is charged. The stores and offers in `js/data.js` are examples.
 
