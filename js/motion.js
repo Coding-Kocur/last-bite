@@ -31,6 +31,7 @@
   }
 
   function show(node) {
+    if (node.classList.contains("is-in")) return;
     node.classList.add("is-in");
     if (!still && node.hasAttribute("data-count")) countUp(node);
   }

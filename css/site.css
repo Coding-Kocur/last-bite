@@ -1553,6 +1553,8 @@ textarea.form-control {
   }
 
   .js .reveal,
+  .js .reveal.from-left,
+  .js .reveal.from-right,
   .js .stagger > *,
   .js .after-lines,
   .js .line > span,
