@@ -1,3 +1,6 @@
+/* Loaded after Bootstrap. Bootstrap gives the grid, navbar, forms, modal and
+   accordion; this file gives them the Last Bite look and adds the motion. */
+
 :root {
   --ink: #17130f;
   --paper: #ffffff;
@@ -11,24 +14,26 @@
   --display: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
   --text: "Barlow", Arial, Helvetica, sans-serif;
   --gutter: 32px;
-  --page: 1180px;
+  --page: 1240px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --fill-time: 0.35s;
+
+  --bs-body-font-family: var(--text);
+  --bs-body-color: var(--ink);
+  --bs-body-bg: var(--paper);
+  --bs-border-radius: 4px;
+  --bs-border-radius-sm: 4px;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+@view-transition {
+  navigation: auto;
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-padding-top: 88px;
 }
 
 body {
-  margin: 0;
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--text);
   font-size: 17px;
   line-height: 1.5;
 }
@@ -37,6 +42,10 @@ img {
   display: block;
   max-width: 100%;
   height: auto;
+}
+
+figure {
+  margin: 0;
 }
 
 h1,
@@ -65,10 +74,14 @@ a {
   outline-color: var(--sticker);
 }
 
-.wrap {
+/* headings and boxes that only receive focus from a script */
+[tabindex="-1"]:focus-visible {
+  outline: none;
+}
+
+.container {
   max-width: var(--page);
-  margin: 0 auto;
-  padding: 0 var(--gutter);
+  padding-inline: var(--gutter);
 }
 
 .narrow {
@@ -87,7 +100,7 @@ a {
 .skip:focus {
   left: 12px;
   top: 12px;
-  z-index: 20;
+  z-index: 1100;
 }
 
 /* header */
@@ -95,13 +108,29 @@ a {
 .top {
   background: var(--ink);
   color: var(--paper);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.top .wrap {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+.top.scrolled {
+  box-shadow: 0 8px 24px rgba(23, 19, 15, 0.28);
+}
+
+.top.away {
+  transform: translateY(-100%);
+}
+
+.top .navbar {
+  --bs-navbar-padding-y: 0;
+  --bs-navbar-color: var(--paper);
+  --bs-navbar-hover-color: var(--paper);
+  --bs-navbar-active-color: var(--paper);
+  --bs-navbar-brand-color: var(--paper);
+  --bs-navbar-brand-hover-color: var(--paper);
+  --bs-navbar-nav-link-padding-x: 0;
+  --bs-navbar-toggler-border-color: transparent;
+  --bs-navbar-toggler-padding-x: 8px;
+  --bs-navbar-toggler-focus-width: 0;
+  --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23fff' stroke-width='2.5' d='M4 8h22M4 15h22M4 22h22'/%3e%3c/svg%3e");
   min-height: 68px;
 }
 
@@ -112,6 +141,7 @@ a {
   font-family: var(--display);
   font-weight: 700;
   font-size: 30px;
+  line-height: 1;
   letter-spacing: 0.01em;
   text-decoration: none;
   text-transform: uppercase;
@@ -119,82 +149,285 @@ a {
 
 .brand svg {
   flex: none;
+  transition: transform 0.5s var(--ease-out);
 }
 
-.nav {
-  display: flex;
-  gap: 30px;
+.nav-link {
+  position: relative;
+  display: inline-block;
   font-weight: 500;
 }
 
-.nav a {
-  text-decoration: none;
-  padding: 6px 0;
-  border-bottom: 3px solid transparent;
-  transition: border-color 120ms ease-out;
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 2px;
+  width: 100%;
+  height: 3px;
+  background: var(--sticker);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--fill-time) var(--ease-out);
 }
 
-.nav a:hover {
-  border-bottom-color: #6b655c;
+.nav-link:hover::after,
+.nav-link:focus-visible::after,
+.nav-link.active::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
-.nav a[aria-current="page"] {
-  border-bottom-color: var(--sticker);
+.nav-link:focus-visible {
+  box-shadow: none;
+  outline: 3px solid var(--sticker);
+  outline-offset: 3px;
 }
 
-/* buttons */
+/* buttons: the colour sweeps in from the left and leaves to the right */
 
 .btn {
-  display: inline-block;
-  font: 600 18px/1 var(--text);
-  padding: 15px 22px;
-  border: 2px solid var(--ink);
-  border-radius: 4px;
-  background: var(--sticker);
-  color: var(--ink);
-  text-decoration: none;
-  cursor: pointer;
-  transition: background-color 120ms ease-out, color 120ms ease-out;
+  --bs-btn-font-family: var(--text);
+  --bs-btn-font-weight: 600;
+  --bs-btn-font-size: 18px;
+  --bs-btn-line-height: 1.2;
+  --bs-btn-padding-x: 22px;
+  --bs-btn-padding-y: 13px;
+  --bs-btn-border-width: 2px;
+  --bs-btn-border-radius: 4px;
+  --bs-btn-border-color: var(--ink);
+  --bs-btn-hover-border-color: var(--ink);
+  --bs-btn-active-border-color: var(--ink);
+  --bs-btn-disabled-color: var(--muted);
+  --bs-btn-disabled-bg: var(--shelf);
+  --bs-btn-disabled-border-color: var(--line);
+  --bs-btn-disabled-opacity: 1;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
 }
 
-.btn:hover {
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: var(--ink);
-  color: var(--sticker);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--fill-time) var(--ease-out);
+}
+
+.btn:hover::after,
+.btn:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.btn:disabled::after {
+  content: none;
 }
 
 .btn:active {
   transform: translateY(1px);
 }
 
-.btn[disabled] {
-  background: var(--shelf);
-  border-color: var(--line);
-  color: var(--muted);
-  cursor: default;
+.btn:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+  box-shadow: none;
 }
 
-.btn.plain {
-  background: var(--paper);
+.btn-bite {
+  --bs-btn-color: var(--ink);
+  --bs-btn-bg: var(--sticker);
+  --bs-btn-hover-color: var(--sticker);
+  --bs-btn-hover-bg: var(--sticker);
+  --bs-btn-active-color: var(--sticker);
+  --bs-btn-active-bg: var(--sticker);
 }
 
-.btn.plain:hover {
-  background: var(--ink);
-  color: var(--paper);
+.btn-plain {
+  --bs-btn-color: var(--ink);
+  --bs-btn-bg: var(--paper);
+  --bs-btn-hover-color: var(--paper);
+  --bs-btn-hover-bg: var(--paper);
+  --bs-btn-active-color: var(--paper);
+  --bs-btn-active-bg: var(--paper);
 }
 
-.btn.small {
-  font-size: 16px;
-  padding: 10px 14px;
+.btn-sm {
+  --bs-btn-font-size: 16px;
+  --bs-btn-padding-x: 14px;
+  --bs-btn-padding-y: 8px;
 }
 
 .textlink {
   font-weight: 600;
   text-decoration-thickness: 2px;
   text-underline-offset: 4px;
+  transition: text-underline-offset 0.2s ease, text-decoration-color 0.2s ease;
 }
 
 .textlink:hover {
   text-decoration-color: var(--sticker-dark);
+  text-underline-offset: 7px;
+}
+
+/* forms */
+
+.form-control,
+.form-select,
+.form-check-input {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px var(--sticker);
+}
+
+.form-check-input {
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
+}
+
+.form-check-input:checked {
+  background-color: var(--ink);
+  border-color: var(--ink);
+}
+
+.form-label {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+textarea.form-control {
+  min-height: 84px;
+}
+
+.form-control[aria-invalid="true"] {
+  border-color: var(--red);
+  border-width: 2px;
+}
+
+.field {
+  margin-bottom: 16px;
+}
+
+.row > .field {
+  margin-bottom: 0;
+}
+
+.field .hint {
+  display: block;
+  color: var(--muted);
+  font-size: 15px;
+  margin-top: 4px;
+}
+
+.field .error {
+  color: var(--red);
+  font-weight: 600;
+  font-size: 15px;
+  margin: 4px 0 0;
+}
+
+/* titles that come up line by line */
+
+.line {
+  display: block;
+  overflow: hidden;
+  padding: 0.08em 0 0.16em;
+  margin-bottom: -0.24em;
+}
+
+.line > span {
+  display: inline-block;
+}
+
+.js .line > span {
+  transform: translateY(110%);
+  transition: transform 0.8s var(--ease-out);
+}
+
+.js .lines.is-in .line > span {
+  transform: none;
+}
+
+.js .lines.is-in .line:nth-child(2) > span {
+  transition-delay: 0.15s;
+}
+
+.js .lines.is-in .line:nth-child(3) > span {
+  transition-delay: 0.3s;
+}
+
+.js .after-lines {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s var(--ease-out);
+}
+
+.js .lines.is-in ~ .after-lines {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.45s;
+}
+
+.js .lines.is-in ~ .after-lines ~ .after-lines {
+  transition-delay: 0.6s;
+}
+
+/* blocks that appear once when they are scrolled to, and stay */
+
+.js .reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  transition-delay: var(--d, 0s);
+}
+
+.js .reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.js .stagger > * {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  transition-delay: var(--d, 0s);
+}
+
+.js .stagger.is-in > * {
+  opacity: 1;
+  transform: none;
+}
+
+.stagger > :nth-child(2) {
+  --d: 0.14s;
+}
+
+.stagger > :nth-child(3) {
+  --d: 0.28s;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+.offer.enter,
+.ticket.enter {
+  animation: rise 0.5s ease both;
+  animation-delay: var(--d, 0s);
 }
 
 /* hero */
@@ -225,20 +458,39 @@ a {
 }
 
 .hero figure {
-  margin: 0;
   position: relative;
 }
 
-.hero figure img {
+.frame {
+  overflow: hidden;
+}
+
+.frame img {
   width: 100%;
+  transition: transform 0.9s var(--ease-out);
+}
+
+.hero .frame {
+  height: 100%;
+}
+
+.hero .frame img {
   height: 100%;
   object-fit: cover;
+  animation: settle 1.8s var(--ease-out) both;
+}
+
+@keyframes settle {
+  from {
+    scale: 1.16;
+  }
 }
 
 .sticker {
   position: absolute;
   width: 172px;
   height: 172px;
+  margin: 0;
   border-radius: 50%;
   background: var(--sticker);
   display: flex;
@@ -252,7 +504,8 @@ a {
   font-size: 21px;
   line-height: 1.05;
   text-transform: uppercase;
-  animation: stick 420ms cubic-bezier(0.2, 0.9, 0.3, 1.2) 250ms backwards;
+  animation: stick 420ms cubic-bezier(0.2, 0.9, 0.3, 1.2) 900ms backwards;
+  transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.4);
 }
 
 .sticker b {
@@ -268,33 +521,45 @@ a {
   }
 }
 
-/* section heads */
+/* sections */
 
 .section {
   padding: 72px 0;
+  overflow-x: clip;
 }
 
 .section.shelf {
   background: var(--shelf);
 }
 
+.section h2 {
+  font-size: clamp(40px, 4.4vw, 58px);
+  margin-bottom: 26px;
+}
+
 .head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 20px;
+  gap: 6px 20px;
   flex-wrap: wrap;
   margin-bottom: 26px;
 }
 
-.head h2,
-.section h2 {
-  font-size: clamp(40px, 4.4vw, 58px);
+.head h2 {
+  margin-bottom: 0;
 }
 
 .head .when {
   color: var(--muted);
   font-weight: 500;
+  margin: 0;
+}
+
+.intro {
+  font-size: 19px;
+  max-width: 40em;
+  margin: -12px 0 26px;
 }
 
 /* filters */
@@ -323,7 +588,7 @@ a {
   background: var(--paper);
   color: var(--ink);
   cursor: pointer;
-  transition: background-color 120ms ease-out;
+  transition: background-color 0.15s ease-out, color 0.15s ease-out;
 }
 
 .chip:hover {
@@ -343,23 +608,12 @@ a {
   font-size: 16px;
 }
 
-.filters select {
-  font: 500 16px/1.2 var(--text);
-  padding: 8px 10px;
-  border: 1px solid var(--ink);
-  border-radius: 4px;
-  background: var(--paper);
-  color: var(--ink);
-}
-
-.filters input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--ink);
+.filters .form-select {
+  font-weight: 500;
 }
 
 .filters .count {
-  margin-left: auto;
+  margin: 0 0 0 auto;
   color: var(--muted);
   font-size: 16px;
 }
@@ -388,6 +642,7 @@ a {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.7s var(--ease-out);
 }
 
 .offer h3 {
@@ -446,10 +701,29 @@ a {
   font-weight: 600;
 }
 
+.collect .closing.soon::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--red);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.25;
+  }
+}
+
 .tag {
   background: var(--sticker);
   border-radius: 4px;
   padding: 10px 14px 8px;
+  transform-origin: 15% 85%;
+  transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.4);
 }
 
 .tag .was {
@@ -484,21 +758,49 @@ a {
   font-size: 19px;
 }
 
-/* evening timeline */
+/* steps of the evening, and the survey numbers on the store page */
 
-.evening {
-  list-style: none;
-  margin: 34px 0 0;
-  padding: 0;
-  display: grid;
+.step {
+  position: relative;
+  padding-top: 16px;
 }
 
-.evening li {
-  border-top: 2px solid var(--ink);
-  padding-top: 14px;
+.step::before,
+.step::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
 }
 
-.evening .clock {
+.step::before {
+  top: 0;
+  height: 2px;
+  background: var(--ink);
+  transform-origin: left;
+}
+
+.step::after {
+  top: 2px;
+  height: 4px;
+  background: var(--sticker);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--fill-time) var(--ease-out);
+}
+
+.js .stagger .step::before {
+  transform: scaleX(0);
+  transition: transform 0.9s var(--ease-out);
+  transition-delay: var(--d, 0s);
+}
+
+.js .stagger.is-in .step::before {
+  transform: none;
+}
+
+.step .clock,
+.stat b {
   display: block;
   font-family: var(--display);
   font-weight: 700;
@@ -506,30 +808,26 @@ a {
   line-height: 1;
 }
 
-.evening h3 {
+.stat b {
+  font-size: 60px;
+  font-variant-numeric: tabular-nums;
+}
+
+.step h3 {
   font-size: 26px;
   font-weight: 600;
   margin: 10px 0 6px;
 }
 
-.evening p {
-  margin: 0;
+.step p {
+  margin: 6px 0 0;
   max-width: 24em;
 }
 
 /* promises */
 
 .promises {
-  display: grid;
-  align-items: center;
-}
-
-.promises figure {
   margin: 0;
-}
-
-.promises dl {
-  margin: 28px 0 0;
 }
 
 .promises dt {
@@ -547,61 +845,80 @@ a {
 
 /* questions */
 
-.qa details {
-  border-bottom: 1px solid var(--line);
-}
-
-.qa details:first-of-type {
+.accordion {
+  --bs-accordion-bg: transparent;
+  --bs-accordion-color: var(--ink);
+  --bs-accordion-border-color: var(--line);
+  --bs-accordion-btn-color: var(--ink);
+  --bs-accordion-btn-bg: transparent;
+  --bs-accordion-active-color: var(--ink);
+  --bs-accordion-active-bg: transparent;
+  --bs-accordion-btn-padding-x: 12px;
+  --bs-accordion-btn-padding-y: 18px;
+  --bs-accordion-body-padding-x: 12px;
+  --bs-accordion-body-padding-y: 0;
+  --bs-accordion-btn-focus-box-shadow: none;
+  --bs-accordion-btn-icon: none;
+  --bs-accordion-btn-active-icon: none;
+  --bs-accordion-btn-icon-width: auto;
+  --bs-accordion-btn-icon-transform: rotate(45deg);
+  margin-inline: -12px;
   border-top: 2px solid var(--ink);
 }
 
-.qa summary {
-  cursor: pointer;
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
+.accordion-flush > .accordion-item:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.accordion-button {
   gap: 16px;
-  padding: 18px 0;
   font-family: var(--display);
   font-weight: 600;
   font-size: 27px;
   line-height: 1.15;
+  transition: background-color 0.2s ease;
 }
 
-.qa summary::-webkit-details-marker {
-  display: none;
-}
-
-.qa summary::after {
+.accordion-button::after {
   content: "+";
+  height: auto;
   font-weight: 500;
+  line-height: 1;
 }
 
-.qa details[open] summary::after {
-  content: "\2212";
+.accordion-button:not(.collapsed) {
+  box-shadow: none;
 }
 
-.qa summary:hover {
-  background: var(--shelf);
+.accordion-button:hover {
+  background: #e6e4dd;
 }
 
-.qa details p {
+.accordion-button:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: -3px;
+}
+
+.accordion-body {
   max-width: 40em;
-  margin: 0 0 20px;
+  margin: 0;
+  padding-bottom: 20px;
 }
 
-/* dialog and ticket */
+/* reserve window and ticket */
 
-dialog {
-  border: 2px solid var(--ink);
-  border-radius: 6px;
-  padding: 0;
-  width: min(560px, calc(100vw - 32px));
-  color: var(--ink);
+.modal {
+  --bs-modal-width: 560px;
+  --bs-modal-margin: 16px;
+  --bs-modal-color: var(--ink);
+  --bs-modal-border-color: var(--ink);
+  --bs-modal-border-width: 2px;
+  --bs-modal-border-radius: 6px;
 }
 
-dialog::backdrop {
-  background: rgba(23, 19, 15, 0.62);
+.modal-backdrop {
+  --bs-backdrop-bg: var(--ink);
+  --bs-backdrop-opacity: 0.62;
 }
 
 .sheet {
@@ -628,58 +945,8 @@ dialog::backdrop {
   margin: 0;
 }
 
-.field {
-  margin-bottom: 16px;
-}
-
-.field label,
-.field .label {
-  display: block;
+.summary .what {
   font-weight: 600;
-  margin-bottom: 5px;
-}
-
-.field .hint {
-  display: block;
-  color: var(--muted);
-  font-size: 15px;
-  margin-top: 4px;
-}
-
-.field input,
-.field select,
-.field textarea {
-  width: 100%;
-  font: 400 17px/1.3 var(--text);
-  padding: 11px 12px;
-  border: 1px solid var(--ink);
-  border-radius: 4px;
-  background: var(--paper);
-  color: var(--ink);
-}
-
-.field textarea {
-  min-height: 84px;
-  resize: vertical;
-}
-
-.field input:focus-visible,
-.field select:focus-visible,
-.field textarea:focus-visible {
-  outline-offset: 1px;
-}
-
-.field .error {
-  color: var(--red);
-  font-weight: 600;
-  font-size: 15px;
-  margin-top: 4px;
-}
-
-.field input[aria-invalid="true"],
-.field textarea[aria-invalid="true"] {
-  border-color: var(--red);
-  border-width: 2px;
 }
 
 .note {
@@ -701,6 +968,21 @@ dialog::backdrop {
   border: 2px solid var(--ink);
   border-radius: 6px;
   display: grid;
+}
+
+/* the ticket comes out as if it were printed */
+.modal .ticket {
+  animation: print 0.7s var(--ease-out) both;
+}
+
+@keyframes print {
+  from {
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(-14px);
+  }
+  to {
+    clip-path: inset(0);
+  }
 }
 
 .ticket .stub {
@@ -740,6 +1022,10 @@ dialog::backdrop {
   margin: 0 0 4px;
 }
 
+.ticket .body .btn {
+  margin-top: 14px;
+}
+
 .ticket .state {
   display: inline-block;
   font-size: 14px;
@@ -766,11 +1052,12 @@ dialog::backdrop {
   gap: 20px;
   list-style: none;
   padding: 0;
-  margin: 28px 0 0;
+  margin: 0;
 }
 
 .pagehead {
   padding: 56px 0 8px;
+  overflow-x: clip;
 }
 
 .pagehead h1 {
@@ -783,12 +1070,19 @@ dialog::backdrop {
   margin-top: 16px;
 }
 
+.pickups {
+  padding-top: 28px;
+}
+
+#tally {
+  font-weight: 600;
+}
+
 /* stores page */
 
 .rates {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 26px;
 }
 
 .rates th,
@@ -853,36 +1147,8 @@ dialog::backdrop {
   font-size: 30px;
 }
 
-.asked {
-  display: grid;
-  margin-top: 30px;
-}
-
-.asked div {
-  border-top: 2px solid var(--ink);
-  padding-top: 12px;
-}
-
-.asked b {
-  display: block;
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: 60px;
-  line-height: 1;
-}
-
-.asked p {
-  margin: 6px 0 0;
-  max-width: 22em;
-}
-
 .form {
-  display: grid;
-  margin-top: 26px;
-}
-
-.form .full {
-  grid-column: 1 / -1;
+  max-width: 884px;
 }
 
 .done-box {
@@ -901,7 +1167,6 @@ dialog::backdrop {
   gap: 12px;
   align-items: flex-end;
   flex-wrap: wrap;
-  margin-top: 22px;
 }
 
 .check .field {
@@ -910,39 +1175,13 @@ dialog::backdrop {
   max-width: 300px;
 }
 
-.check input {
+.check .form-control {
+  padding-block: 4px;
   font-family: var(--display);
   font-weight: 600;
   font-size: 26px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-}
-
-.intro {
-  font-size: 19px;
-  max-width: 40em;
-  margin: 14px 0 0;
-}
-
-.qlist {
-  margin-top: 26px;
-}
-
-.checkline label {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-}
-
-.field.checkline input {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--ink);
-}
-
-.ticket .body .btn {
-  margin-top: 14px;
 }
 
 #check-out {
@@ -954,14 +1193,6 @@ dialog::backdrop {
   margin-top: 16px;
 }
 
-.pickups {
-  padding-top: 8px;
-}
-
-#tally {
-  font-weight: 600;
-}
-
 /* footer */
 
 .foot {
@@ -969,13 +1200,6 @@ dialog::backdrop {
   color: var(--paper);
   padding: 44px 0;
   font-size: 16px;
-}
-
-.foot .wrap {
-  display: flex;
-  justify-content: space-between;
-  gap: 40px;
-  flex-wrap: wrap;
 }
 
 .foot p {
@@ -987,11 +1211,47 @@ dialog::backdrop {
 .foot nav {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 8px;
 }
 
 .foot nav a {
   text-underline-offset: 4px;
+  transition: text-underline-offset 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+/* hover, for screens with a mouse */
+
+@media (hover: hover) {
+  .brand:hover svg {
+    transform: rotate(-32deg);
+  }
+
+  .sticker:hover {
+    transform: rotate(3deg) scale(1.06);
+  }
+
+  .frame:hover img {
+    transform: scale(1.05);
+  }
+
+  .offer:hover .pic img {
+    transform: scale(1.08);
+  }
+
+  .offer:hover .tag {
+    transform: rotate(-3deg) scale(1.05);
+  }
+
+  .step:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .foot nav a:hover {
+    text-decoration-color: var(--sticker);
+    text-underline-offset: 7px;
+  }
 }
 
 /* desktop only */
@@ -1006,6 +1266,11 @@ dialog::backdrop {
   .hero .copy {
     align-self: center;
     padding: 64px 72px 64px max(var(--gutter), calc((100vw - var(--page)) / 2 + var(--gutter)));
+  }
+
+  /* a little spare picture for the scroll drift in js/motion.js */
+  .hero .frame img {
+    scale: 1.08;
   }
 
   .sticker {
@@ -1025,16 +1290,6 @@ dialog::backdrop {
     text-align: right;
   }
 
-  .evening {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 36px;
-  }
-
-  .promises {
-    grid-template-columns: 5fr 6fr;
-    gap: 64px;
-  }
-
   .ticket {
     grid-template-columns: 320px 1fr;
   }
@@ -1050,38 +1305,32 @@ dialog::backdrop {
     border-right: 2px dashed var(--ink);
   }
 
-  dialog .ticket {
+  .modal .ticket {
     grid-template-columns: 1fr;
   }
 
-  dialog .ticket .stub {
+  .modal .ticket .stub {
     border-right: 0;
     border-bottom: 2px dashed var(--ink);
   }
 
-  .storehero {
-    display: grid;
-    grid-template-columns: 6fr 5fr;
-    gap: 56px;
-    align-items: center;
+  /* photos and the text beside them slide in from their own side */
+  .js .reveal.from-left,
+  .js .reveal.from-right {
+    transition: opacity 0.9s ease, transform 0.9s var(--ease-out);
   }
 
-  .costs {
-    display: grid;
-    grid-template-columns: 7fr 4fr;
-    gap: 56px;
-    align-items: start;
+  .js .reveal.from-left {
+    transform: translateX(-60px);
   }
 
-  .asked {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 36px;
+  .js .reveal.from-right {
+    transform: translateX(60px);
   }
 
-  .form {
-    grid-template-columns: 1fr 1fr;
-    gap: 0 28px;
-    max-width: 860px;
+  .js .reveal.from-left.is-in,
+  .js .reveal.from-right.is-in {
+    transform: none;
   }
 }
 
@@ -1092,25 +1341,20 @@ dialog::backdrop {
     --gutter: 20px;
   }
 
+  html {
+    scroll-padding-top: 16px;
+  }
+
   body {
     font-size: 16px;
   }
 
-  .top .wrap {
+  .top .navbar {
     min-height: 60px;
-    gap: 12px;
-    flex-wrap: wrap;
-    padding-top: 8px;
-    padding-bottom: 8px;
   }
 
   .brand {
     font-size: 26px;
-  }
-
-  .nav {
-    gap: 20px;
-    font-size: 15px;
   }
 
   .hero .copy {
@@ -1184,16 +1428,12 @@ dialog::backdrop {
     align-self: center;
   }
 
-  .evening {
-    gap: 26px;
-  }
-
-  .evening .clock {
+  .step .clock {
     font-size: 50px;
   }
 
-  .promises {
-    gap: 28px;
+  .stat b {
+    font-size: 48px;
   }
 
   .ticket .stub {
@@ -1207,39 +1447,23 @@ dialog::backdrop {
   .pagehead {
     padding-top: 36px;
   }
-
-  .storehero figure {
-    margin: 26px 0 0;
-  }
-
-  .costs .sum {
-    margin-top: 28px;
-  }
-
-  .asked {
-    gap: 24px;
-  }
-
-  .asked b {
-    font-size: 48px;
-  }
-
-  .foot .wrap {
-    gap: 24px;
-  }
 }
 
 @media (max-width: 560px) {
-  .nav {
-    gap: 16px;
-  }
-
   .hero h1 {
     font-size: 56px;
   }
 
   .hero figure {
     height: 230px;
+  }
+
+  .pagehead h1 {
+    font-size: 46px;
+  }
+
+  .pagehead p {
+    font-size: 18px;
   }
 
   .offer {
@@ -1262,23 +1486,79 @@ dialog::backdrop {
     padding: 20px;
   }
 
-  .qa summary {
+  .accordion-button {
     font-size: 23px;
+  }
+
+  .rates th {
+    width: 38%;
+    padding-right: 12px;
+  }
+}
+
+/* large monitors */
+
+@media (min-width: 1700px) {
+  :root {
+    --page: 1440px;
+  }
+
+  body {
+    font-size: 18px;
+  }
+
+  .hero {
+    min-height: 780px;
+  }
+
+  .hero h1 {
+    font-size: 136px;
+  }
+
+  .hero .lede {
+    font-size: 23px;
+  }
+
+  .offer {
+    grid-template-columns: 248px minmax(0, 1fr) 220px 190px 150px;
+    gap: 36px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  :root {
+    --fill-time: 0s;
+  }
+
   html {
     scroll-behavior: auto;
   }
 
-  .sticker {
+  .sticker,
+  .hero .frame img,
+  .offer.enter,
+  .ticket.enter,
+  .modal .ticket,
+  .collect .closing.soon::before {
     animation: none;
   }
 
-  .btn,
-  .chip,
-  .nav a {
+  .top,
+  .frame img,
+  .offer .pic img,
+  .tag,
+  .sticker,
+  .brand svg {
+    transition: none;
+  }
+
+  .js .reveal,
+  .js .stagger > *,
+  .js .after-lines,
+  .js .line > span,
+  .js .stagger .step::before {
+    opacity: 1;
+    transform: none;
     transition: none;
   }
 }

@@ -133,6 +133,7 @@
     var list = $("list");
     var state = { type: "", area: "", veg: false, sort: "time" };
     var dialog = $("reserve");
+    var modal = new bootstrap.Modal(dialog);
     var current = null;
 
     $("today").textContent = new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
@@ -181,7 +182,7 @@
       li.appendChild(price);
 
       var go = el("div", "go");
-      var btn = el("button", "btn", left ? "Reserve" : "Gone");
+      var btn = el("button", "btn btn-bite", left ? "Reserve" : "Gone");
       btn.type = "button";
       btn.disabled = !left;
       btn.setAttribute("aria-label", left ? "Reserve " + o.title + " from " + o.store : o.title + " from " + o.store + " is gone");
@@ -194,7 +195,10 @@
       return li;
     }
 
-    function render() {
+    // how: "reveal" on first load (rows appear as they are scrolled to),
+    // "enter" after a filter change, nothing for the minute-by-minute refresh
+    function render(how) {
+      if (how === "reveal" && !window.lbWatch) how = "";
       var offers = allOffers().filter(function (o) {
         return (!state.type || o.type === state.type) && (!state.area || o.area === state.area) && (!state.veg || o.veg);
       });
@@ -206,9 +210,15 @@
         return da + minutes(a.from) - (db + minutes(b.from));
       });
       list.textContent = "";
-      offers.forEach(function (o) {
-        list.appendChild(row(o));
+      offers.forEach(function (o, i) {
+        var li = row(o);
+        if (how) {
+          li.classList.add(how);
+          li.style.setProperty("--d", (how === "enter" ? Math.min(i, 8) * 0.05 : (i % 3) * 0.08) + "s");
+        }
+        list.appendChild(li);
       });
+      if (how === "reveal") window.lbWatch(list);
       $("none").hidden = offers.length > 0;
       $("count").textContent = offers.length === 1 ? "1 offer" : offers.length + " offers";
 
@@ -224,20 +234,20 @@
           c.setAttribute("aria-pressed", String(c === chip));
         });
         state.type = chip.dataset.type;
-        render();
+        render("enter");
       });
     });
     $("f-area").addEventListener("change", function (e) {
       state.area = e.target.value;
-      render();
+      render("enter");
     });
     $("f-sort").addEventListener("change", function (e) {
       state.sort = e.target.value;
-      render();
+      render("enter");
     });
     $("f-veg").addEventListener("change", function (e) {
       state.veg = e.target.checked;
-      render();
+      render("enter");
     });
 
     function total() {
@@ -266,7 +276,7 @@
       $("r-name-err").hidden = true;
       $("reserve-step").hidden = false;
       $("reserve-done").hidden = true;
-      dialog.showModal();
+      modal.show();
     }
 
     $("r-qty").addEventListener("change", function () {
@@ -285,7 +295,7 @@
       var day = offerDay(current);
       var qty = Math.min(Number($("r-qty").value), leftOf(current));
       if (!qty) {
-        dialog.close();
+        modal.hide();
         render();
         return;
       }
@@ -318,32 +328,31 @@
       render();
     });
 
-    dialog.querySelectorAll("[data-close]").forEach(function (b) {
-      b.addEventListener("click", function () {
-        dialog.close();
-      });
-    });
-    dialog.addEventListener("click", function (e) {
-      if (e.target === dialog) dialog.close();
+    dialog.addEventListener("shown.bs.modal", function () {
+      if (!$("reserve-step").hidden) $("r-name").focus();
     });
 
-    render();
-    setInterval(render, 60000);
+    render("reveal");
+    setInterval(function () {
+      render();
+    }, 60000);
   }
 
   /* ---------- my pickups ---------- */
 
   function pickupsPage() {
     var box = $("tickets");
+    var first = true;
 
     function render() {
       var all = read(PICKUPS_KEY);
       box.textContent = "";
-      all.forEach(function (p) {
-        var li = el("li", "ticket");
+      all.forEach(function (p, i) {
+        var li = el("li", first ? "ticket enter" : "ticket");
+        li.style.setProperty("--d", Math.min(i, 6) * 0.08 + "s");
         li.appendChild(ticket(p, true));
         if (p.status === "reserved") {
-          var cancel = el("button", "btn plain small", "Cancel this pickup");
+          var cancel = el("button", "btn btn-plain btn-sm", "Cancel this pickup");
           cancel.type = "button";
           cancel.addEventListener("click", function () {
             p.status = "cancelled";
@@ -357,6 +366,7 @@
         box.appendChild(li);
       });
       $("empty").hidden = all.length > 0;
+      first = false;
 
       var done = all.filter(function (p) {
         return p.status === "collected";
@@ -471,7 +481,7 @@
       t.appendChild(ticket(found, true));
       out.appendChild(t);
       if (found.status === "reserved") {
-        var done = el("button", "btn", "Hand over and mark as collected");
+        var done = el("button", "btn btn-bite", "Hand over and mark as collected");
         done.type = "button";
         done.addEventListener("click", function () {
           var all = read(PICKUPS_KEY);

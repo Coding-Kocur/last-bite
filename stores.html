@@ -10,172 +10,195 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.9/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-yEPZ7jP9S0QKiUQ0m3jjsO4ProIW7wvR9gXkI7JOGa2XVsw53Yke2bsdkBbjmmiX" crossorigin="anonymous">
   <link rel="stylesheet" href="css/site.css">
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
   <a class="skip" href="#post">Skip to the offer form</a>
 
-  <header class="top on-ink">
-    <div class="wrap">
-      <a class="brand" href="index.html">
-        <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
-          <defs>
-            <mask id="bite">
-              <rect width="32" height="32" fill="#fff"/>
-              <circle cx="27" cy="6" r="6.5"/>
-              <circle cx="31" cy="15.5" r="4"/>
-            </mask>
-          </defs>
-          <circle cx="16" cy="16" r="14" fill="#ffd60a" mask="url(#bite)"/>
-        </svg>
-        Last Bite
-      </a>
-      <nav class="nav" aria-label="Main">
-        <a href="index.html">Offers</a>
-        <a href="stores.html" aria-current="page">For stores</a>
-        <a href="pickups.html">My pickups</a>
-      </nav>
-    </div>
+  <header class="top on-ink sticky-top">
+    <nav class="navbar navbar-expand-lg" data-bs-theme="dark" aria-label="Main">
+      <div class="container">
+        <a class="navbar-brand brand" href="index.html">
+          <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
+            <defs>
+              <mask id="bite">
+                <rect width="32" height="32" fill="#fff"/>
+                <circle cx="27" cy="6" r="6.5"/>
+                <circle cx="31" cy="15.5" r="4"/>
+              </mask>
+            </defs>
+            <circle cx="16" cy="16" r="14" fill="#ffd60a" mask="url(#bite)"/>
+          </svg>
+          Last Bite
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Menu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="menu">
+          <ul class="navbar-nav ms-auto pb-2 pb-lg-0 gap-lg-4">
+            <li class="nav-item"><a class="nav-link" href="index.html">Offers</a></li>
+            <li class="nav-item"><a class="nav-link active" href="stores.html" aria-current="page">For stores</a></li>
+            <li class="nav-item"><a class="nav-link" href="pickups.html">My pickups</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
   </header>
 
   <main>
     <section class="pagehead">
-      <div class="wrap storehero">
-        <div>
-          <h1>Sell what is left at closing time.</h1>
-          <p>Put tonight's unsold bread, meals or groceries on Last Bite. You set the price, the number and the collection time. People nearby reserve it, pay in the app and come to collect.</p>
-          <div class="row-actions">
-            <a class="btn" href="#post">Post an offer</a>
-            <a class="btn plain" href="#costs">What it costs</a>
+      <div class="container">
+        <div class="row align-items-center g-4 g-lg-5">
+          <div class="col-lg-7">
+            <h1 class="lines"><span class="line"><span>Sell what is left</span></span> <span class="line"><span>at closing time.</span></span></h1>
+            <p class="after-lines">Put tonight's unsold bread, meals or groceries on Last Bite. You set the price, the number and the collection time. People nearby reserve it, pay in the app and come to collect.</p>
+            <div class="row-actions after-lines">
+              <a class="btn btn-bite" href="#post">Post an offer</a>
+              <a class="btn btn-plain" href="#costs">What it costs</a>
+            </div>
           </div>
+          <figure class="col-lg-5 reveal from-right">
+            <div class="frame">
+              <img src="img/counter.jpg" width="1600" height="1000" alt="A bakery counter with a glass display case">
+            </div>
+          </figure>
         </div>
-        <figure>
-          <img src="img/counter.jpg" width="1600" height="1000" alt="A bakery counter with a glass display case">
-        </figure>
       </div>
     </section>
 
     <section class="section" id="costs">
-      <div class="wrap costs">
-        <div>
-          <h2>What it costs</h2>
-          <table class="rates">
-            <tr>
-              <th scope="row">Joining</th>
-              <td><span class="big">€0</span>No setup fee and nothing to install. Last Bite runs on the phone or computer you already have.</td>
-            </tr>
-            <tr>
-              <th scope="row">Membership</th>
-              <td><span class="big">€15 a month</span>The first month is free.</td>
-            </tr>
-            <tr>
-              <th scope="row">Commission</th>
-              <td><span class="big">20%</span>Of each sale. If nothing sells, you pay no commission.</td>
-            </tr>
-            <tr>
-              <th scope="row">Payout</th>
-              <td><span class="big">After pickup</span>The customer pays in the app. The money is released to you when the pickup is confirmed.</td>
-            </tr>
-          </table>
-        </div>
-        <div class="sum">
-          <h3>A bread bag, for example</h3>
-          <table>
-            <tr><td>Normal price</td><td>€9.00</td></tr>
-            <tr><td>Price on Last Bite</td><td>€3.00</td></tr>
-            <tr><td>Commission, 20%</td><td>€0.60</td></tr>
-            <tr><td>You receive</td><td>€2.40</td></tr>
-          </table>
+      <div class="container">
+        <div class="row align-items-start g-4 g-lg-5">
+          <div class="col-lg-8 reveal from-left">
+            <h2>What it costs</h2>
+            <table class="rates">
+              <tr>
+                <th scope="row">Joining</th>
+                <td><span class="big">€0</span>No setup fee and nothing to install. Last Bite runs on the phone or computer you already have.</td>
+              </tr>
+              <tr>
+                <th scope="row">Membership</th>
+                <td><span class="big">€14.99 a month</span>The first month is free.</td>
+              </tr>
+              <tr>
+                <th scope="row">Commission</th>
+                <td><span class="big">20%</span>Of each sale. If nothing sells, you pay no commission.</td>
+              </tr>
+              <tr>
+                <th scope="row">Payout</th>
+                <td><span class="big">After pickup</span>The customer pays in the app. The money is released to you when the pickup is confirmed.</td>
+              </tr>
+            </table>
+          </div>
+          <div class="col-lg-4 reveal from-right">
+            <div class="sum">
+              <h3>A bread bag, for example</h3>
+              <table>
+                <tr><td>Normal price</td><td>€9.00</td></tr>
+                <tr><td>Price on Last Bite</td><td>€3.00</td></tr>
+                <tr><td>Commission, 20%</td><td>€0.60</td></tr>
+                <tr><td>You receive</td><td>€2.40</td></tr>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="section shelf">
-      <div class="wrap">
-        <h2>We asked nine shops in Nicosia</h2>
-        <div class="asked">
-          <div>
-            <b>9 of 9</b>
-            <p>said that unsold food at the end of the day is a regular problem and costs them money.</p>
+      <div class="container">
+        <h2 class="reveal">We asked nine shops in Nicosia</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4 g-lg-5 stagger">
+          <div class="col">
+            <div class="step stat">
+              <b data-count>9 of 9</b>
+              <p>said that unsold food at the end of the day is a regular problem and costs them money.</p>
+            </div>
           </div>
-          <div>
-            <b>9 of 9</b>
-            <p>would sell that food at a reduced price through an app.</p>
+          <div class="col">
+            <div class="step stat">
+              <b data-count>9 of 9</b>
+              <p>would sell that food at a reduced price through an app.</p>
+            </div>
           </div>
-          <div>
-            <b>33 of 35</b>
-            <p>people in our customer survey, most of them students, would use an app to reserve reduced food.</p>
+          <div class="col">
+            <div class="step stat">
+              <b data-count>33 of 35</b>
+              <p>people in our customer survey, most of them students, would use an app to reserve reduced food.</p>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     <section class="section" id="post">
-      <div class="wrap">
-        <h2>Post tonight's offer</h2>
-        <p class="intro">It takes about half a minute. The offer goes onto the offers page straight away. In this preview it is saved in your browser only.</p>
+      <div class="container">
+        <h2 class="reveal">Post tonight's offer</h2>
+        <p class="intro reveal">It takes about half a minute. The offer goes onto the offers page straight away. In this preview it is saved in your browser only.</p>
 
-        <form class="form" id="post-form" novalidate>
-          <div class="field">
-            <label for="p-store">Store name</label>
-            <input id="p-store" type="text" maxlength="40" autocomplete="organization">
+        <form class="row g-3 form reveal" id="post-form" novalidate>
+          <div class="col-md-6 field">
+            <label class="form-label" for="p-store">Store name</label>
+            <input class="form-control" id="p-store" type="text" maxlength="40" autocomplete="organization">
             <p class="error" id="p-store-err" hidden></p>
           </div>
-          <div class="field">
-            <label for="p-area">Area</label>
-            <select id="p-area"></select>
+          <div class="col-md-6 field">
+            <label class="form-label" for="p-area">Area</label>
+            <select class="form-select" id="p-area"></select>
           </div>
-          <div class="field">
-            <label for="p-title">Name of the offer</label>
-            <input id="p-title" type="text" maxlength="50">
+          <div class="col-md-6 field">
+            <label class="form-label" for="p-title">Name of the offer</label>
+            <input class="form-control" id="p-title" type="text" maxlength="50">
             <p class="error" id="p-title-err" hidden></p>
           </div>
-          <div class="field">
-            <label for="p-type">Kind of food</label>
-            <select id="p-type">
+          <div class="col-md-6 field">
+            <label class="form-label" for="p-type">Kind of food</label>
+            <select class="form-select" id="p-type">
               <option>Bakery</option>
               <option>Meals</option>
               <option>Grocery</option>
             </select>
           </div>
-          <div class="field full">
-            <label for="p-contents">What the customer gets</label>
-            <textarea id="p-contents" maxlength="160"></textarea>
+          <div class="col-12 field">
+            <label class="form-label" for="p-contents">What the customer gets</label>
+            <textarea class="form-control" id="p-contents" maxlength="160"></textarea>
             <span class="hint">List the items, for example: 1 village loaf, 4 koulouri, 2 olive pies.</span>
             <p class="error" id="p-contents-err" hidden></p>
           </div>
-          <div class="field">
-            <label for="p-was">Normal price, €</label>
-            <input id="p-was" type="number" inputmode="decimal" min="0" step="0.1">
+          <div class="col-6 field">
+            <label class="form-label" for="p-was">Normal price, €</label>
+            <input class="form-control" id="p-was" type="number" inputmode="decimal" min="0" step="0.1">
             <p class="error" id="p-was-err" hidden></p>
           </div>
-          <div class="field">
-            <label for="p-now">Reduced price, €</label>
-            <input id="p-now" type="number" inputmode="decimal" min="0" step="0.1">
+          <div class="col-6 field">
+            <label class="form-label" for="p-now">Reduced price, €</label>
+            <input class="form-control" id="p-now" type="number" inputmode="decimal" min="0" step="0.1">
             <p class="error" id="p-now-err" hidden></p>
           </div>
-          <div class="field">
-            <label for="p-from">Collection from</label>
-            <input id="p-from" type="time" value="19:00">
+          <div class="col-6 field">
+            <label class="form-label" for="p-from">Collection from</label>
+            <input class="form-control" id="p-from" type="time" value="19:00">
           </div>
-          <div class="field">
-            <label for="p-until">Collection until</label>
-            <input id="p-until" type="time" value="20:00">
+          <div class="col-6 field">
+            <label class="form-label" for="p-until">Collection until</label>
+            <input class="form-control" id="p-until" type="time" value="20:00">
             <p class="error" id="p-until-err" hidden></p>
           </div>
-          <div class="field">
-            <label for="p-qty">How many do you have?</label>
-            <input id="p-qty" type="number" inputmode="numeric" min="1" max="50" step="1" value="3">
+          <div class="col-md-6 field">
+            <label class="form-label" for="p-qty">How many do you have?</label>
+            <input class="form-control" id="p-qty" type="number" inputmode="numeric" min="1" max="50" step="1" value="3">
             <p class="error" id="p-qty-err" hidden></p>
           </div>
-          <div class="field">
-            <label for="p-date">Date on the food</label>
-            <input id="p-date" type="text" maxlength="40" placeholder="Best today">
+          <div class="col-md-6 field">
+            <label class="form-label" for="p-date">Date on the food</label>
+            <input class="form-control" id="p-date" type="text" maxlength="40" placeholder="Best today">
             <span class="hint">Best-before date, or how long it keeps.</span>
           </div>
-          <div class="field">
-            <label for="p-photo">Photo</label>
-            <select id="p-photo">
+          <div class="col-md-6 field">
+            <label class="form-label" for="p-photo">Photo</label>
+            <select class="form-select" id="p-photo">
               <option value="bread">Bread and buns</option>
               <option value="croissants">Croissants</option>
               <option value="pitta">Pitta</option>
@@ -191,34 +214,37 @@
             </select>
             <span class="hint">In the app you take the photo with your phone.</span>
           </div>
-          <div class="field checkline">
-            <label for="p-veg"><input id="p-veg" type="checkbox"> Vegetarian</label>
+          <div class="col-md-6 field align-self-center">
+            <div class="form-check mb-0">
+              <input class="form-check-input" id="p-veg" type="checkbox">
+              <label class="form-check-label" for="p-veg">Vegetarian</label>
+            </div>
           </div>
-          <div class="full">
-            <button class="btn" type="submit">List the offer</button>
+          <div class="col-12">
+            <button class="btn btn-bite" type="submit">List the offer</button>
           </div>
         </form>
 
         <div class="done-box" id="posted" tabindex="-1" hidden>
           <p id="posted-text"></p>
           <div class="row-actions">
-            <a class="btn" href="index.html#offers">See it on the offers page</a>
-            <button class="btn plain" type="button" id="clear-mine">Remove my test offers</button>
+            <a class="btn btn-bite" href="index.html#offers">See it on the offers page</a>
+            <button class="btn btn-plain" type="button" id="clear-mine">Remove my test offers</button>
           </div>
         </div>
       </div>
     </section>
 
     <section class="section shelf" id="check">
-      <div class="wrap">
-        <h2>Check a pickup code</h2>
-        <p class="intro">The customer shows a six-character code at the till. Type it in to see what they reserved, then hand over the bag. In this preview a code is found only on the device where the reservation was made.</p>
-        <form class="check" id="check-form">
+      <div class="container">
+        <h2 class="reveal">Check a pickup code</h2>
+        <p class="intro reveal">The customer shows a six-character code at the till. Type it in to see what they reserved, then hand over the bag. In this preview a code is found only on the device where the reservation was made.</p>
+        <form class="check reveal" id="check-form">
           <div class="field">
-            <label for="c-code">Pickup code</label>
-            <input id="c-code" type="text" maxlength="7" autocomplete="off" autocapitalize="characters" spellcheck="false">
+            <label class="form-label" for="c-code">Pickup code</label>
+            <input class="form-control" id="c-code" type="text" maxlength="7" autocomplete="off" autocapitalize="characters" spellcheck="false">
           </div>
-          <button class="btn" type="submit">Check</button>
+          <button class="btn btn-bite" type="submit">Check</button>
         </form>
         <div id="check-out" aria-live="polite" hidden></div>
       </div>
@@ -226,20 +252,24 @@
   </main>
 
   <footer class="foot on-ink">
-    <div class="wrap">
-      <div>
-        <a class="brand" href="index.html">Last Bite</a>
-        <p>Last Bite is being built in Nicosia. The stores and offers on this site are examples until our first partner stores go live.</p>
+    <div class="container">
+      <div class="row gy-4 justify-content-between">
+        <div class="col-md-7">
+          <a class="brand" href="index.html">Last Bite</a>
+          <p>Last Bite is being built in Nicosia. The stores and offers on this site are examples until our first partner stores go live.</p>
+        </div>
+        <nav class="col-md-auto" aria-label="Footer">
+          <a href="index.html#offers">Tonight's offers</a>
+          <a href="stores.html">For stores</a>
+          <a href="pickups.html">My pickups</a>
+        </nav>
       </div>
-      <nav aria-label="Footer">
-        <a href="index.html#offers">Tonight's offers</a>
-        <a href="stores.html">For stores</a>
-        <a href="pickups.html">My pickups</a>
-      </nav>
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.9/dist/js/bootstrap.bundle.min.js" integrity="sha384-WyOxWvTyr1QaMPfiPJSv76iReVthorl5uWlFtZPyK0IEB0hGzo9y5Bp9mYanr8Bu" crossorigin="anonymous"></script>
   <script src="js/data.js"></script>
+  <script src="js/motion.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

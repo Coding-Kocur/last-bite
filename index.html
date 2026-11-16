@@ -10,58 +10,69 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.9/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-yEPZ7jP9S0QKiUQ0m3jjsO4ProIW7wvR9gXkI7JOGa2XVsw53Yke2bsdkBbjmmiX" crossorigin="anonymous">
   <link rel="stylesheet" href="css/site.css">
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
   <a class="skip" href="#offers">Skip to tonight's offers</a>
 
-  <header class="top on-ink">
-    <div class="wrap">
-      <a class="brand" href="index.html">
-        <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
-          <defs>
-            <mask id="bite">
-              <rect width="32" height="32" fill="#fff"/>
-              <circle cx="27" cy="6" r="6.5"/>
-              <circle cx="31" cy="15.5" r="4"/>
-            </mask>
-          </defs>
-          <circle cx="16" cy="16" r="14" fill="#ffd60a" mask="url(#bite)"/>
-        </svg>
-        Last Bite
-      </a>
-      <nav class="nav" aria-label="Main">
-        <a href="index.html" aria-current="page">Offers</a>
-        <a href="stores.html">For stores</a>
-        <a href="pickups.html">My pickups</a>
-      </nav>
-    </div>
+  <header class="top on-ink sticky-top">
+    <nav class="navbar navbar-expand-lg" data-bs-theme="dark" aria-label="Main">
+      <div class="container">
+        <a class="navbar-brand brand" href="index.html">
+          <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
+            <defs>
+              <mask id="bite">
+                <rect width="32" height="32" fill="#fff"/>
+                <circle cx="27" cy="6" r="6.5"/>
+                <circle cx="31" cy="15.5" r="4"/>
+              </mask>
+            </defs>
+            <circle cx="16" cy="16" r="14" fill="#ffd60a" mask="url(#bite)"/>
+          </svg>
+          Last Bite
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Menu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="menu">
+          <ul class="navbar-nav ms-auto pb-2 pb-lg-0 gap-lg-4">
+            <li class="nav-item"><a class="nav-link active" href="index.html" aria-current="page">Offers</a></li>
+            <li class="nav-item"><a class="nav-link" href="stores.html">For stores</a></li>
+            <li class="nav-item"><a class="nav-link" href="pickups.html">My pickups</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
   </header>
 
   <main>
     <section class="hero">
       <div class="copy">
-        <h1>Good food at closing time.</h1>
-        <p class="lede">Bakeries, grocers and restaurants in Nicosia put tonight's unsold food on Last Bite at a reduced price. You see what it is, reserve it and collect it before they close.</p>
-        <div class="actions">
-          <a class="btn" href="#offers">See tonight's offers</a>
+        <h1 class="lines"><span class="line"><span>Good food</span></span> <span class="line"><span>at closing</span></span> <span class="line"><span>time.</span></span></h1>
+        <p class="lede after-lines">Bakeries, grocers and restaurants in Nicosia put tonight's unsold food on Last Bite at a reduced price. You see what it is, reserve it and collect it before they close.</p>
+        <div class="actions after-lines">
+          <a class="btn btn-bite" href="#offers">See tonight's offers</a>
           <a class="textlink" href="stores.html">I run a store</a>
         </div>
       </div>
       <figure>
-        <img src="img/hero-bakery-window.jpg" width="2000" height="1250" alt="Bread and pastries in a bakery window in the evening">
-        <p class="sticker" id="sticker"><b id="sticker-n">9</b><span>offers left<br>tonight</span></p>
+        <div class="frame">
+          <img src="img/hero-bakery-window.jpg" width="2000" height="1250" alt="Bread and pastries in a bakery window in the evening">
+        </div>
+        <p class="sticker" id="sticker"><b id="sticker-n" data-count>9</b><span>offers left<br>tonight</span></p>
       </figure>
     </section>
 
     <section class="section" id="offers">
-      <div class="wrap">
-        <div class="head">
+      <div class="container">
+        <div class="head reveal">
           <h2>Tonight in Nicosia</h2>
           <p class="when" id="today"></p>
         </div>
 
-        <div class="filters">
+        <div class="filters reveal">
           <div class="chips" role="group" aria-label="Kind of food">
             <button class="chip" type="button" data-type="" aria-pressed="true">Everything</button>
             <button class="chip" type="button" data-type="Bakery" aria-pressed="false">Bakery</button>
@@ -69,18 +80,21 @@
             <button class="chip" type="button" data-type="Grocery" aria-pressed="false">Grocery</button>
           </div>
           <label>Area
-            <select id="f-area">
+            <select class="form-select form-select-sm w-auto" id="f-area">
               <option value="">All of Nicosia</option>
             </select>
           </label>
           <label>Sort
-            <select id="f-sort">
+            <select class="form-select form-select-sm w-auto" id="f-sort">
               <option value="time">Collect soonest</option>
               <option value="price">Lowest price</option>
               <option value="saving">Biggest saving</option>
             </select>
           </label>
-          <label><input type="checkbox" id="f-veg"> Vegetarian only</label>
+          <div class="form-check mb-0">
+            <input class="form-check-input" type="checkbox" id="f-veg">
+            <label class="form-check-label" for="f-veg">Vegetarian only</label>
+          </div>
           <p class="count" id="count" aria-live="polite"></p>
         </div>
 
@@ -90,135 +104,173 @@
     </section>
 
     <section class="section shelf">
-      <div class="wrap">
-        <h2>An evening with Last Bite</h2>
-        <ol class="evening">
-          <li>
-            <span class="clock">17:40</span>
-            <h3>You reserve</h3>
-            <p>You pick the bread bag from a bakery in Aglantzia and pay in the app. The money is held until the bag is in your hands.</p>
+      <div class="container">
+        <h2 class="reveal">An evening with Last Bite</h2>
+        <ol class="evening row row-cols-1 row-cols-md-3 g-4 g-lg-5 list-unstyled stagger">
+          <li class="col">
+            <div class="step">
+              <span class="clock">17:40</span>
+              <h3>You reserve</h3>
+              <p>You pick the bread bag from a bakery in Aglantzia and pay in the app. The money is held until the bag is in your hands.</p>
+            </div>
           </li>
-          <li>
-            <span class="clock">19:30</span>
-            <h3>The bakery packs it</h3>
-            <p>At closing time the baker sets your bag aside with your name on it. You already know what is inside.</p>
+          <li class="col">
+            <div class="step">
+              <span class="clock">19:30</span>
+              <h3>The bakery packs it</h3>
+              <p>At closing time the baker sets your bag aside with your name on it. You already know what is inside.</p>
+            </div>
           </li>
-          <li>
-            <span class="clock">19:45</span>
-            <h3>You collect</h3>
-            <p>You show your pickup code at the till. The bakery ticks it off and gets paid.</p>
+          <li class="col">
+            <div class="step">
+              <span class="clock">19:45</span>
+              <h3>You collect</h3>
+              <p>You show your pickup code at the till. The bakery ticks it off and gets paid.</p>
+            </div>
           </li>
         </ol>
       </div>
     </section>
 
     <section class="section">
-      <div class="wrap promises">
-        <figure>
-          <img src="img/bag-street.jpg" width="1400" height="1050" loading="lazy" alt="Someone carrying a paper bag home along a street">
-        </figure>
-        <div>
-          <h2>You know what you are buying</h2>
-          <dl>
-            <dt>The contents are listed</dt>
-            <dd>Every offer says what is in the bag before you reserve it.</dd>
-            <dt>The date is on the offer</dt>
-            <dd>You see the best-before date, or the time the food has to be collected by.</dd>
-            <dt>Stores are checked first</dt>
-            <dd>We visit a store before it goes on Last Bite, and customers rate every pickup.</dd>
-            <dt>The store is paid after you collect</dt>
-            <dd>Your payment is held until the pickup is confirmed.</dd>
-          </dl>
+      <div class="container">
+        <div class="row align-items-center g-4 g-lg-5">
+          <figure class="col-lg-5 reveal from-left">
+            <div class="frame">
+              <img src="img/bag-street.jpg" width="1400" height="1050" loading="lazy" alt="Someone carrying a paper bag home along a street">
+            </div>
+          </figure>
+          <div class="col-lg-7 reveal from-right">
+            <h2>You know what you are buying</h2>
+            <dl class="promises">
+              <dt>The contents are listed</dt>
+              <dd>Every offer says what is in the bag before you reserve it.</dd>
+              <dt>The date is on the offer</dt>
+              <dd>You see the best-before date, or the time the food has to be collected by.</dd>
+              <dt>Stores are checked first</dt>
+              <dd>We visit a store before it goes on Last Bite, and customers rate every pickup.</dd>
+              <dt>The store is paid after you collect</dt>
+              <dd>Your payment is held until the pickup is confirmed.</dd>
+            </dl>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section shelf qa">
-      <div class="wrap narrow">
-        <h2>Questions</h2>
-        <div class="qlist">
-          <details>
-            <summary>Is the food still good?</summary>
-            <p>Yes. It is food the store made or stocked for today and did not sell: bread from the morning, a meal cooked this evening, groceries close to their date. The date is on every offer, so you decide before you reserve.</p>
-          </details>
-          <details>
-            <summary>How do I pay?</summary>
-            <p>By card in the app when you reserve. The store receives the money once you have collected. This website is a preview of the app, so nothing is charged here.</p>
-          </details>
-          <details>
-            <summary>Where do I collect?</summary>
-            <p>At the store, during the collection time shown on the offer. We are starting in Nicosia.</p>
-          </details>
-          <details>
-            <summary>Will the app be in Greek?</summary>
-            <p>Yes, in Greek and in English.</p>
-          </details>
-          <details>
-            <summary>I run a shop. How do I join?</summary>
-            <p>The page <a class="textlink" href="stores.html">for stores</a> explains the costs and lets you post an offer to try it.</p>
-          </details>
+    <section class="section shelf">
+      <div class="container narrow">
+        <h2 class="reveal">Questions</h2>
+        <div class="accordion accordion-flush reveal" id="faq">
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q1" aria-expanded="false" aria-controls="q1">Is the food still good?</button>
+            </h3>
+            <div class="accordion-collapse collapse" id="q1" data-bs-parent="#faq">
+              <p class="accordion-body">Yes. It is food the store made or stocked for today and did not sell: bread from the morning, a meal cooked this evening, groceries close to their date. The date is on every offer, so you decide before you reserve.</p>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q2" aria-expanded="false" aria-controls="q2">How do I pay?</button>
+            </h3>
+            <div class="accordion-collapse collapse" id="q2" data-bs-parent="#faq">
+              <p class="accordion-body">By card in the app when you reserve. The store receives the money once you have collected. This website is a preview of the app, so nothing is charged here.</p>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q3" aria-expanded="false" aria-controls="q3">Where do I collect?</button>
+            </h3>
+            <div class="accordion-collapse collapse" id="q3" data-bs-parent="#faq">
+              <p class="accordion-body">At the store, during the collection time shown on the offer. We are starting in Nicosia.</p>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q4" aria-expanded="false" aria-controls="q4">Will the app be in Greek?</button>
+            </h3>
+            <div class="accordion-collapse collapse" id="q4" data-bs-parent="#faq">
+              <p class="accordion-body">Yes, in Greek and in English.</p>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q5" aria-expanded="false" aria-controls="q5">I run a shop. How do I join?</button>
+            </h3>
+            <div class="accordion-collapse collapse" id="q5" data-bs-parent="#faq">
+              <p class="accordion-body">The page <a class="textlink" href="stores.html">for stores</a> explains the costs and lets you post an offer to try it.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="foot on-ink">
-    <div class="wrap">
-      <div>
-        <a class="brand" href="index.html">Last Bite</a>
-        <p>Last Bite is being built in Nicosia. The stores and offers on this site are examples until our first partner stores go live.</p>
+    <div class="container">
+      <div class="row gy-4 justify-content-between">
+        <div class="col-md-7">
+          <a class="brand" href="index.html">Last Bite</a>
+          <p>Last Bite is being built in Nicosia. The stores and offers on this site are examples until our first partner stores go live.</p>
+        </div>
+        <nav class="col-md-auto" aria-label="Footer">
+          <a href="index.html#offers">Tonight's offers</a>
+          <a href="stores.html">For stores</a>
+          <a href="pickups.html">My pickups</a>
+        </nav>
       </div>
-      <nav aria-label="Footer">
-        <a href="index.html#offers">Tonight's offers</a>
-        <a href="stores.html">For stores</a>
-        <a href="pickups.html">My pickups</a>
-      </nav>
     </div>
   </footer>
 
-  <dialog id="reserve" aria-labelledby="reserve-title">
-    <div class="sheet" id="reserve-step">
-      <h2 id="reserve-title">Reserve</h2>
-      <div class="summary">
-        <div>
-          <p class="what" id="r-what"></p>
-          <p id="r-inside"></p>
-          <p id="r-collect"></p>
+  <div class="modal fade" id="reserve" tabindex="-1" aria-labelledby="reserve-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="sheet" id="reserve-step">
+          <h2 id="reserve-title">Reserve</h2>
+          <div class="summary">
+            <div>
+              <p class="what" id="r-what"></p>
+              <p id="r-inside"></p>
+              <p id="r-collect"></p>
+            </div>
+            <div class="tag">
+              <span class="was" id="r-was"></span>
+              <span class="now" id="r-now"></span>
+            </div>
+          </div>
+          <form id="reserve-form" novalidate>
+            <div class="field">
+              <label class="form-label" for="r-qty">How many?</label>
+              <select class="form-select" id="r-qty"></select>
+            </div>
+            <div class="field">
+              <label class="form-label" for="r-name">Your first name</label>
+              <input class="form-control" id="r-name" type="text" autocomplete="given-name" maxlength="30" required>
+              <span class="hint">The store writes it on the bag.</span>
+              <p class="error" id="r-name-err" hidden>Please enter your first name.</p>
+            </div>
+            <p class="note">This is a preview of Last Bite. Nothing is charged and no food is set aside yet.</p>
+            <div class="row-actions">
+              <button class="btn btn-bite" type="submit" id="r-submit">Reserve</button>
+              <button class="btn btn-plain" type="button" data-bs-dismiss="modal">Cancel</button>
+            </div>
+          </form>
         </div>
-        <div class="tag">
-          <span class="was" id="r-was"></span>
-          <span class="now" id="r-now"></span>
+        <div class="sheet" id="reserve-done" hidden>
+          <h2 tabindex="-1" id="done-title">Reserved</h2>
+          <div class="ticket" id="done-ticket"></div>
+          <div class="row-actions">
+            <a class="btn btn-bite" href="pickups.html">My pickups</a>
+            <button class="btn btn-plain" type="button" data-bs-dismiss="modal">Back to offers</button>
+          </div>
         </div>
       </div>
-      <form id="reserve-form" novalidate>
-        <div class="field">
-          <label for="r-qty">How many?</label>
-          <select id="r-qty"></select>
-        </div>
-        <div class="field">
-          <label for="r-name">Your first name</label>
-          <input id="r-name" type="text" autocomplete="given-name" maxlength="30" required>
-          <span class="hint">The store writes it on the bag.</span>
-          <p class="error" id="r-name-err" hidden>Please enter your first name.</p>
-        </div>
-        <p class="note">This is a preview of Last Bite. Nothing is charged and no food is set aside yet.</p>
-        <div class="row-actions">
-          <button class="btn" type="submit" id="r-submit">Reserve</button>
-          <button class="btn plain" type="button" data-close>Cancel</button>
-        </div>
-      </form>
     </div>
-    <div class="sheet" id="reserve-done" hidden>
-      <h2 tabindex="-1" id="done-title">Reserved</h2>
-      <div class="ticket" id="done-ticket"></div>
-      <div class="row-actions">
-        <a class="btn" href="pickups.html">My pickups</a>
-        <button class="btn plain" type="button" data-close>Back to offers</button>
-      </div>
-    </div>
-  </dialog>
+  </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.9/dist/js/bootstrap.bundle.min.js" integrity="sha384-WyOxWvTyr1QaMPfiPJSv76iReVthorl5uWlFtZPyK0IEB0hGzo9y5Bp9mYanr8Bu" crossorigin="anonymous"></script>
   <script src="js/data.js"></script>
+  <script src="js/motion.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
