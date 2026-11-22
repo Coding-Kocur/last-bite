@@ -3,6 +3,7 @@
 
   var OFFERS_KEY = "lastbite.offers";
   var PICKUPS_KEY = "lastbite.pickups";
+  var FAVS_KEY = "lastbite.favs";
   var CODE_CHARS = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 
   function $(id) {
@@ -106,6 +107,30 @@
     return code.slice(0, 3) + " " + code.slice(3);
   }
 
+  function isFav(store) {
+    return read(FAVS_KEY).indexOf(store) !== -1;
+  }
+
+  function toggleFav(store) {
+    var favs = read(FAVS_KEY);
+    var i = favs.indexOf(store);
+    if (i === -1) favs.push(store);
+    else favs.splice(i, 1);
+    write(FAVS_KEY, favs);
+  }
+
+  // Ratings come from collected pickups that the customer rated.
+  function ratingOf(store) {
+    var rated = read(PICKUPS_KEY).filter(function (p) {
+      return p.store === store && p.rating;
+    });
+    if (!rated.length) return "";
+    var avg = rated.reduce(function (sum, p) {
+      return sum + p.rating;
+    }, 0) / rated.length;
+    return ", rated " + avg.toFixed(1) + " of 5 (" + rated.length + (rated.length === 1 ? " rating)" : " ratings)");
+  }
+
   function ticket(p, withState) {
     var frag = document.createDocumentFragment();
     var stub = el("div", "stub");
@@ -122,6 +147,7 @@
       var words = { reserved: "Reserved", collected: "Collected", cancelled: "Cancelled" };
       var cls = p.status === "collected" ? "state done" : p.status === "cancelled" ? "state off" : "state";
       body.appendChild(el("span", cls, words[p.status]));
+      if (p.rating) body.appendChild(el("p", "rated", "You rated it " + p.rating + " of 5"));
     }
     frag.appendChild(body);
     return frag;
@@ -131,7 +157,7 @@
 
   function offersPage() {
     var list = $("list");
-    var state = { type: "", area: "", veg: false, sort: "time" };
+    var state = { type: "", area: "", veg: false, fav: false, sort: "time" };
     var dialog = $("reserve");
     var modal = new bootstrap.Modal(dialog);
     var current = null;
@@ -161,7 +187,7 @@
 
       var info = el("div", "info");
       info.appendChild(el("h3", "", o.store));
-      info.appendChild(el("p", "where", o.type + ", " + o.area));
+      info.appendChild(el("p", "where", o.type + ", " + o.area + ratingOf(o.store)));
       info.appendChild(el("p", "what", o.title));
       info.appendChild(el("p", "inside", o.contents));
       if (o.date) info.appendChild(el("span", "datemark", o.date));
@@ -191,8 +217,29 @@
       });
       go.appendChild(btn);
       go.appendChild(el("p", "left" + (left && left <= 2 ? " last" : ""), left === 0 ? "None left" : left <= 2 ? "Last " + left : left + " left"));
+      var save = el("button", "save");
+      save.type = "button";
+      save.dataset.store = o.store;
+      save.setAttribute("aria-label", "Save " + o.store);
+      markSave(save, isFav(o.store));
+      save.addEventListener("click", function () {
+        toggleFav(o.store);
+        if (state.fav) {
+          render("enter");
+          return;
+        }
+        list.querySelectorAll(".save").forEach(function (b) {
+          if (b.dataset.store === o.store) markSave(b, isFav(o.store));
+        });
+      });
+      go.appendChild(save);
       li.appendChild(go);
       return li;
+    }
+
+    function markSave(b, on) {
+      b.textContent = on ? "Saved" : "Save store";
+      b.setAttribute("aria-pressed", String(on));
     }
 
     // how: "reveal" on first load (rows appear as they are scrolled to),
@@ -200,7 +247,7 @@
     function render(how) {
       if (how === "reveal" && !window.lbWatch) how = "";
       var offers = allOffers().filter(function (o) {
-        return (!state.type || o.type === state.type) && (!state.area || o.area === state.area) && (!state.veg || o.veg);
+        return (!state.type || o.type === state.type) && (!state.area || o.area === state.area) && (!state.veg || o.veg) && (!state.fav || isFav(o.store));
       });
       offers.sort(function (a, b) {
         if (state.sort === "price") return a.now - b.now;
@@ -247,6 +294,10 @@
     });
     $("f-veg").addEventListener("change", function (e) {
       state.veg = e.target.checked;
+      render("enter");
+    });
+    $("f-fav").addEventListener("change", function (e) {
+      state.fav = e.target.checked;
       render("enter");
     });
 
@@ -363,6 +414,24 @@
           holder.appendChild(cancel);
           li.querySelector(".body").appendChild(holder);
         }
+        if (p.status === "collected" && !p.rating) {
+          var rate = el("div", "rate");
+          rate.setAttribute("role", "group");
+          rate.setAttribute("aria-label", "Rate your pickup from " + p.store);
+          rate.appendChild(el("span", "", "How was it?"));
+          [1, 2, 3, 4, 5].forEach(function (n) {
+            var b = el("button", "", String(n));
+            b.type = "button";
+            b.setAttribute("aria-label", n + " of 5");
+            b.addEventListener("click", function () {
+              p.rating = n;
+              write(PICKUPS_KEY, all);
+              render();
+            });
+            rate.appendChild(b);
+          });
+          li.querySelector(".body").appendChild(rate);
+        }
         box.appendChild(li);
       });
       $("empty").hidden = all.length > 0;
@@ -460,12 +529,83 @@
       $("posted").hidden = false;
       $("posted").focus();
       form.reset();
+      board();
     });
 
     $("clear-mine").addEventListener("click", function () {
       write(OFFERS_KEY, []);
       $("posted").hidden = true;
+      board();
     });
+
+    function bags(list) {
+      return list.reduce(function (sum, p) {
+        return sum + p.qty;
+      }, 0);
+    }
+
+    function board() {
+      var mine = read(OFFERS_KEY);
+      var ids = mine.map(function (o) {
+        return o.id;
+      });
+      var picks = read(PICKUPS_KEY).filter(function (p) {
+        return ids.indexOf(p.offerId) !== -1 && p.status !== "cancelled";
+      });
+      var done = picks.filter(function (p) {
+        return p.status === "collected";
+      });
+      $("b-listed").textContent = mine.length;
+      $("b-reserved").textContent = bags(picks);
+      $("b-collected").textContent = bags(done);
+      $("b-paid").textContent = euro(done.reduce(function (sum, p) {
+        return sum + p.total;
+      }, 0) * 0.8);
+
+      var ul = $("mine");
+      ul.textContent = "";
+      mine.forEach(function (o) {
+        var li = el("li");
+        var txt = el("div");
+        txt.appendChild(el("p", "what", o.title + ", " + o.store));
+        txt.appendChild(el("p", "", o.qty + " at " + euro(o.now) + ", collection " + o.from + " to " + o.until + ", " + leftOf(o) + " left"));
+        li.appendChild(txt);
+        var acts = el("div", "row-actions");
+        var again = el("button", "btn btn-plain btn-sm", "Use as template");
+        again.type = "button";
+        again.addEventListener("click", function () {
+          fill(o);
+        });
+        var del = el("button", "btn btn-plain btn-sm", "Remove");
+        del.type = "button";
+        del.addEventListener("click", function () {
+          write(OFFERS_KEY, read(OFFERS_KEY).filter(function (x) {
+            return x.id !== o.id;
+          }));
+          board();
+        });
+        acts.appendChild(again);
+        acts.appendChild(del);
+        li.appendChild(acts);
+        ul.appendChild(li);
+      });
+      $("mine-none").hidden = mine.length > 0;
+    }
+
+    // A past offer fills the form, so the store only changes what is different tonight.
+    function fill(o) {
+      ["store", "area", "title", "type", "contents", "was", "now", "from", "until", "qty", "photo"].forEach(function (k) {
+        $("p-" + k).value = o[k];
+      });
+      $("p-date").value = o.date || "";
+      $("p-veg").checked = !!o.veg;
+      $("posted").hidden = true;
+      var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      $("post").scrollIntoView({ behavior: still ? "auto" : "smooth" });
+      $("p-store").focus({ preventScroll: true });
+    }
+
+    board();
 
     var found = null;
 
@@ -491,6 +631,7 @@
           write(PICKUPS_KEY, all);
           found.status = "collected";
           showResult();
+          board();
         });
         out.appendChild(done);
       }
