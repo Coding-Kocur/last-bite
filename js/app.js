@@ -267,6 +267,7 @@
       });
       if (how === "reveal") window.lbWatch(list);
       $("none").hidden = offers.length > 0;
+      $("none").textContent = state.fav ? "None of your saved stores has an offer that matches. Tap Save store under an offer to add a store." : "Nothing left that matches. Try another area or kind of food.";
       $("count").textContent = offers.length === 1 ? "1 offer" : offers.length + " offers";
 
       var stillOpen = allOffers().filter(function (o) {
